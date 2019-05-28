@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <arg name="geotiff_map_file_path" default="./hector_maps"/>
+
+  <param name="/use_sim_time" value="true"/>
+
+  <node pkg="rosbag" type="play" name="player" output="screen" args="-d 5 -r 1 --clock --hz 10 /home/ros/Downloads/2012-04-02-10-54-41.bag"/>
+
+  <node pkg="rviz" type="rviz" name="rviz"
+    args="-d /home/ros/Projekty/Kuhajda/catkin_ws_cart/install_isolated/share/cartographer_ros/configuration_files/settings.rviz" />
+
+  <include file="/home/ros/Projekty/Kuhajda/catkin_ws_hector/src/hector_slam/hector_mapping/launch/hector_mapping.launch"/>
+
+  <include file="$(find hector_geotiff)/launch/geotiff_mapper.launch">
+    <arg name="trajectory_source_frame_name" value="scanmatcher_frame"/>
+    <arg name="map_file_path" value="$(arg geotiff_map_file_path)"/>
+  </include>
+
+</launch>

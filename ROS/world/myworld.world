@@ -1,0 +1,21 @@
+window( 
+  size [ 700 700 1]         
+  rotate [ 0 0]    
+  center [ 4.5 -3.7 0 ]       
+  scale 85                 # zoom
+  show_data 1
+  show_clock 1
+)
+
+include "map.inc"
+floorplan (
+  bitmap "newmaze.png"
+  # bitmap "loop.png"
+  # bitmap "myworld.png"
+  # bitmap "540x540-90cm.png"
+  # bitmap "floor_building_sim.png"
+)
+
+
+include "terminator.inc"
+terminator(pose [0 0 0 0])

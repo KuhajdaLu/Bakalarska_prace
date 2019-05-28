@@ -1,0 +1,30 @@
+<launch>
+  <param name="/use_sim_time" value="true"/>
+  <node pkg="rosbag" type="play" name="rosplay"
+        args="-d 5 -r 1 --clock --hz 10 /home/ros/Downloads/5patromoreslower.bag"/>
+  <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+        <!-- <remap from="scan" to="base_scan"/> -->
+	
+  </node>
+  <test time-limit="180" test-name="map_data_test" pkg="gmapping" type="gmapping-rtest" args="90.0 0.05 4000 4000 0.005 0.010"/>
+  <node name="rviz" pkg="rviz" type="rviz" required="true"
+      args="/home/ros/Projekty/Kuhajda/catkin_ws_cart/install_isolated/share/cartographer_ros/configuration_files/demo_2d.rviz" />
+
+  <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="hector_trajectory_server" output="screen">
+    <param name="target_frame_name" type="string" value="/map" />
+    <param name="source_frame_name" type="string" value="/base_link" />
+    <param name="trajectory_update_rate" type="double" value="2" />
+    <param name="trajectory_publish_rate" type="double" value="0.25" />
+  </node>
+
+
+  <node pkg="hector_geotiff" type="geotiff_node" name="hector_geotiff_node" output="screen" launch-prefix="nice -n 15">
+    <remap from="map" to="/dynamic_map" />
+    <param name="map_file_path" type="string" value="$(find hector_geotiff)/maps" />
+    <param name="map_file_base_name" type="string" value="hector_slam_map" />
+    <param name="draw_background_checkerboard" type="bool" value="true" />
+    <param name="draw_free_space_grid" type="bool" value="true" />
+  </node>
+
+</launch>
+<!-- maze_whole_scan_tf_odom -->
